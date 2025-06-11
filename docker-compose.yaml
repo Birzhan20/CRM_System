@@ -1,0 +1,29 @@
+services:
+  backend:
+    image: crm_back
+    container_name: crm_back
+    restart: always
+    build:
+      context: backend/.
+    ports:
+      - 8000:8000
+    networks:
+      - crm_network
+
+  pg_db:
+    container_name: "pg_db"
+    image: postgres:16.3-alpine3.20
+    restart: always
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=crm
+    ports:
+      - "5432:5432"
+    networks:
+      - crm_network
+
+
+networks:
+  crm_network:
+    driver: bridge

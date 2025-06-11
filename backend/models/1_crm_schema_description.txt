@@ -1,0 +1,89 @@
+Таблицы и их поля:
+
+1. users
+   - id
+   - first_name
+   - last_name
+   - password_hash
+   - email
+   - phone
+   - role
+   - created_at
+
+2. services
+   - id
+   - name
+   - description
+   - price
+   - created_at
+   - updated_at
+
+3. ad_campaigns
+   - id
+   - name
+   - service_id (FK -> services.id)
+   - channel
+   - budget
+
+4. clients
+   - id
+   - full_name
+   - phone
+   - email
+   - ad_campaign_id (FK -> ad_campaigns.id)
+   - is_active
+   - created_at
+   - updated_at
+
+5. contracts
+   - id
+   - name
+   - service_id (FK -> services.id)
+   - client_id (FK -> clients.id)
+   - document_file
+   - conclusion_date
+   - duration
+   - amount
+   - created_at
+   - updated_at
+
+Связи между таблицами:
+
+- services (1) <--> (N) ad_campaigns
+- services (1) <--> (N) contracts
+- ad_campaigns (1) <--> (N) clients
+- clients (1) <--> (1) contracts
+
+
+             ┌────────────┐
+             │  services  │
+             └────────────┘
+                  ▲
+                  │ 1
+                  │
+            ┌─────┴────────┐
+            │ ad_campaigns │
+            └──────────────┘
+                  ▲
+                  │ 1
+                  │
+             ┌────┴─────┐
+             │  clients │
+             └──────────┘
+                  │
+                  │ 1
+                  ▼
+             ┌──────────┐
+             │ contracts│
+             └──────────┘
+
+             ┌───────────┐
+             │   users   │
+             └───────────┘
+
+Легенда:
+- `services` ↔ `ad_campaigns`: один сервис может участвовать во многих кампаниях (`1:N`)
+- `ad_campaigns` ↔ `clients`: одна кампания может привлечь много клиентов (`1:N`)
+- `clients` ↔ `contracts`: один клиент может иметь только один контракт (`1:1`)
+- `services` ↔ `contracts`: один сервис может быть частью множества контрактов (`1:N`)
+- `users`: отдельная таблица, связи реализуются на уровне ролей (бизнес-логика), не через FK
